@@ -3,7 +3,7 @@ name: Goniogas check
 on:
   schedule:
     # Runs at 06:00 UTC every day (cron uses UTC)
-    - cron: '0 6 * * *'
+    - cron: '5 14-23,0-1 * * *'
   workflow_dispatch:        # lets you trigger it manually from the Actions tab
 
 jobs:
