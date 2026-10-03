@@ -29,10 +29,10 @@ url = 'https://goniogas.com/producto/cilindro-de-gas-de-10kg/'
 
 task_result = "Failed to run"
 
-success=False
+# success=False
 
-while not success:
-    print('eeeeeeo!!!')
+while True:
+    # print('eeeeeeo!!!')
     try:
 
         driver.get(url)
@@ -49,7 +49,14 @@ while not success:
             existences_exist = existences_element.value_of_css_property("display") != 'none'
             existences= existences_element.text
             not_available = not_available_element.text
-            success=True
+            
+            if existences_exist:
+                task_result= existences + ' disponibles'
+            else:
+                task_result = not_available
+    
+            send_notification(task_result)
+            break
 
 
         except Exception as scrape_error:
@@ -57,6 +64,7 @@ while not success:
             page_title = driver.title
             task_result = f"⚠️ Page loaded ({page_title}), but couldn't extract elements. Error: {str(scrape_error)}"
             send_notification(task_result)
+            break
 
     except Exception as e:
         task_result = f"❌ Script crashed! Error: {str(e)}"
@@ -66,14 +74,6 @@ while not success:
 if 'driver' in locals():
     driver.quit()
 
-# --- 3. SEND NOTIFICATION TO PHONE ---
-# We use ntfy.sh because it requires ZERO API keys or GitHub Secrets!
-# IMPORTANT: Change "my_goniogas_task_8f7a9b" to a random, unique string so no one else gets your notifications.
 
-if existences_exist:
-    task_result= existences + ' disponibles'
-else:
-    task_result = not_available
-    
-send_notification(task_result)
+
         
